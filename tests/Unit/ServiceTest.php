@@ -57,7 +57,7 @@ class ServiceTest extends TestCase
     public function testFail(): void
     {
         $this->expectException(Delivery\Exception::class);
-        $this->expectExceptionMessage('Telegram bot error: Error');
+        $this->expectExceptionMessage('Telegram Bot error: Error');
 
         $this->mock->append(
             new GuzzleHttp\Exception\RequestException('Error', new GuzzleHttp\Psr7\Request('GET', 'uri'))
