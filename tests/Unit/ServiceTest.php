@@ -56,7 +56,7 @@ class ServiceTest extends TestCase
 
     public function testFail(): void
     {
-        $this->expectException(Delivery\Telegram\Exception::class);
+        $this->expectException(Delivery\Exception::class);
         $this->expectExceptionMessage('Telegram bot error: Error');
 
         $this->mock->append(
