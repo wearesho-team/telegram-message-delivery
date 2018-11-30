@@ -33,7 +33,11 @@ class Service implements Delivery\ServiceInterface
                 'text' => $message->getText()
             ]);
         } catch (TelegramSDKException $exception) {
-            throw new Delivery\Exception("Telegram bot error: " . $exception->getMessage(), $exception->getCode(), $exception);
+            throw new Delivery\Exception(
+                "Telegram Bot error: " . $exception->getMessage(),
+                $exception->getCode(),
+                $exception
+            );
         }
     }
 }
