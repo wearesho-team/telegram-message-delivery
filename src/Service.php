@@ -23,7 +23,7 @@ class Service implements Delivery\ServiceInterface
     /**
      * @param Delivery\MessageInterface $message
      *
-     * @throws Exception
+     * @throws Delivery\Exception
      */
     public function send(Delivery\MessageInterface $message): void
     {
@@ -33,7 +33,7 @@ class Service implements Delivery\ServiceInterface
                 'text' => $message->getText()
             ]);
         } catch (TelegramSDKException $exception) {
-            throw new Exception("Telegram bot error: " . $exception->getMessage(), $exception->getCode(), $exception);
+            throw new Delivery\Exception("Telegram bot error: " . $exception->getMessage(), $exception->getCode(), $exception);
         }
     }
 }
