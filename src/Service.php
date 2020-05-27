@@ -2,9 +2,8 @@
 
 namespace Wearesho\Delivery\Telegram;
 
-use Telegram\Bot\Api as TelegramApi;
-use Telegram\Bot\Exceptions\TelegramSDKException;
 use Wearesho\Delivery;
+use TgBotApi\BotApiBase;
 
 /**
  * Class Service
@@ -12,30 +11,29 @@ use Wearesho\Delivery;
  */
 class Service implements Delivery\ServiceInterface
 {
-    /** @var TelegramApi */
-    protected $api;
+    protected BotApiBase\BotApiInterface $api;
 
-    public function __construct(TelegramApi $api)
+    public function __construct(BotApiBase\BotApiInterface $api)
     {
         $this->api = $api;
     }
 
-    /**
-     * @param Delivery\MessageInterface $message
-     *
-     * @throws Delivery\Exception
-     */
     public function send(Delivery\MessageInterface $message): void
     {
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $method = BotApiBase\Method\SendMessageMethod::create($message->getRecipient(), $message->getText());
         try {
-            $this->api->sendMessage([
-                'chat_id' => $message->getRecipient(),
-                'text' => $message->getText()
-            ]);
-        } catch (TelegramSDKException $exception) {
+            $this->api->send($method);
+        } catch (BotApiBase\Exception\ResponseException $exception) {
             throw new Delivery\Exception(
-                "Telegram Bot error: " . $exception->getMessage(),
-                $exception->getCode(),
+                "Telegram Response Error: " . $exception->getMessage(),
+                0,
+                $exception
+            );
+        } catch (\Throwable $exception) {
+            throw new Delivery\Exception(
+                "Telegram Delivery Failed",
+                1,
                 $exception
             );
         }
