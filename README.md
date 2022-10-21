@@ -1,6 +1,6 @@
 # Telegram integration
 [![codecov](https://codecov.io/gh/wearesho-team/telegram-message-delivery/branch/master/graph/badge.svg)](https://codecov.io/gh/wearesho-team/telegram-message-delivery)
-
+[![Build & Test](https://github.com/wearesho-team/telegram-message-delivery/actions/workflows/php.yml/badge.svg)](https://github.com/wearesho-team/telegram-message-delivery/actions/workflows/php.yml)
 [wearesho-team/telegram-message-delivery](https://github.com/wearesho-team/telegram-message-delivery) implementation of
 [Delivery\ServiceInterface](https://github.com/wearesho-team/message-delivery/blob/1.3.4/src/ServiceInterface.php)
 
