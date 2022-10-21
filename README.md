@@ -1,9 +1,10 @@
 # Telegram integration
 [![codecov](https://codecov.io/gh/wearesho-team/telegram-message-delivery/branch/master/graph/badge.svg)](https://codecov.io/gh/wearesho-team/telegram-message-delivery)
-[![Build Status](https://travis-ci.org/wearesho-team/telegram-message-delivery.svg?branch=master)](https://travis-ci.org/wearesho-team/telegram-message-delivery)
 
 [wearesho-team/telegram-message-delivery](https://github.com/wearesho-team/telegram-message-delivery) implementation of
 [Delivery\ServiceInterface](https://github.com/wearesho-team/message-delivery/blob/1.3.4/src/ServiceInterface.php)
+
+Compatibility: tested on PHP 7.4, PHP 8.1
 
 ## Installation
 ```bash
