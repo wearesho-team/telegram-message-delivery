@@ -3,11 +3,12 @@
 namespace Wearesho\Delivery\Telegram\Tests\Unit;
 
 use GuzzleHttp;
+use Klev\TelegramBotApi\Methods\SendMessage;
+use Klev\TelegramBotApi\TelegramException;
 use PHPUnit\Framework\Constraint\IsEqual;
 use PHPUnit\Framework\Constraint\JsonMatches;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use TgBotApi\BotApiBase;
 use Wearesho\Delivery;
 
 /**
@@ -16,15 +17,17 @@ use Wearesho\Delivery;
  */
 class ServiceTest extends TestCase
 {
-    /** @var MockObject|BotApiBase\BotApiInterface|MockObject */
-    protected BotApiBase\BotApiInterface $bot;
+    /** @var MockObject|Delivery\Telegram\Telegram */
+    protected Delivery\Telegram\Telegram $bot;
 
     protected Delivery\Telegram\Service $service;
 
     protected function setUp(): void
     {
-        /** @var BotApiBase\BotApiInterface|MockObject $bot */
-        $bot = $this->getMockForAbstractClass(BotApiBase\BotApiInterface::class);
+        /** @var Delivery\Telegram\Telegram|MockObject $bot */
+        $bot = $this->createMock(
+            Delivery\Telegram\Telegram::class
+        );
         $this->bot = $bot;
         $this->service = new Delivery\Telegram\Service($bot);
     }
@@ -34,12 +37,12 @@ class ServiceTest extends TestCase
         $chatId = mt_rand(1, 10000);
         $text = 'Для микрожизней есть микрозаймы. Надо же держаться и не злить хозяина.';
 
-        $method = BotApiBase\Method\SendMessageMethod::create($chatId, $text);
+        $method = new SendMessage($chatId, $text);
         $message = new Delivery\Message($text, $chatId);
 
         $this->bot
             ->expects($this->once())
-            ->method('send')
+            ->method('sendMessage')
             ->with(new IsEqual($method));
 
         $this->service->send($message);
@@ -52,7 +55,7 @@ class ServiceTest extends TestCase
     {
         $this->bot
             ->expects($this->once())
-            ->method('send')
+            ->method('sendMessage')
             ->willThrowException($internalException);
 
         $this->expectException(Delivery\Exception::class);
@@ -70,7 +73,7 @@ class ServiceTest extends TestCase
     {
         return [
             [
-                new BotApiBase\Exception\ResponseException(
+                new TelegramException(
                     "SomeShitHappens",
                     mt_rand(0, 100),
                 ),
@@ -78,8 +81,8 @@ class ServiceTest extends TestCase
                 0
             ],
             [
-                new \DomainException(),
-                'Telegram Delivery Failed',
+                new \DomainException("DomainErr"),
+                'Telegram Error: DomainErr',
                 1
             ]
         ];

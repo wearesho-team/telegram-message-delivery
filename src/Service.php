@@ -1,38 +1,38 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Wearesho\Delivery\Telegram;
 
+use Klev\TelegramBotApi\Methods\SendMessage;
+use Klev\TelegramBotApi\TelegramException;
 use Wearesho\Delivery;
-use TgBotApi\BotApiBase;
 
-/**
- * Class Service
- * @package Wearesho\Delivery\Telegram
- */
 class Service implements Delivery\ServiceInterface
 {
-    protected BotApiBase\BotApiInterface $api;
+    protected Telegram $telegram;
 
-    public function __construct(BotApiBase\BotApiInterface $api)
+    public function __construct(Telegram $telegram)
     {
-        $this->api = $api;
+        $this->telegram = $telegram;
     }
 
     public function send(Delivery\MessageInterface $message): void
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $method = BotApiBase\Method\SendMessageMethod::create($message->getRecipient(), $message->getText());
         try {
-            $this->api->send($method);
-        } catch (BotApiBase\Exception\ResponseException $exception) {
+            $this->telegram->sendMessage(new SendMessage(
+                $message->getRecipient(),
+                $message->getText()
+            ));
+        } catch (TelegramException $exception) {
             throw new Delivery\Exception(
                 "Telegram Response Error: " . $exception->getMessage(),
                 0,
                 $exception
             );
-        } catch (\Throwable $exception) {
+        } catch (\Exception $exception) {
             throw new Delivery\Exception(
-                "Telegram Delivery Failed",
+                "Telegram Error: " . $exception->getMessage(),
                 1,
                 $exception
             );

@@ -12,9 +12,4 @@ class Config implements Delivery\Telegram\ConfigInterface
     {
         return static::BOT_KEY;
     }
-
-    public function getEndPoint(): string
-    {
-        return static::DEFAULT_ENDPOINT;
-    }
 }
